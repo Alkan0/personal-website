@@ -2,35 +2,29 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import Image from "next/image";
 import styles from "./page.module.css";
 
 type SectionId = "home" | "about" | "projects" | "contact";
 
-// Hydration-safe year (same on server & client)
 const COPYRIGHT_YEAR = 2025;
 
 export default function Home() {
-  // ===== Accent color state (SSR-safe first render)
-  const [hue, setHue] = useState<number>(220); // deterministic default
-
-  // After mount: load saved hue (if any)
+  // Accent color (SSR-safe)
+  const [hue, setHue] = useState<number>(220);
   useEffect(() => {
     try {
       const saved = localStorage.getItem("accent-hue");
       if (saved) setHue(parseInt(saved, 10));
     } catch {}
   }, []);
-
-  // Apply hue to CSS var + persist
   useEffect(() => {
     const brand = `hsl(${hue} 85% 72%)`;
     document.documentElement.style.setProperty("--brand", brand);
-    try {
-      localStorage.setItem("accent-hue", String(hue));
-    } catch {}
+    try { localStorage.setItem("accent-hue", String(hue)); } catch {}
   }, [hue]);
 
-  // ===== Header elevation on scroll
+  // Header elevation on scroll
   const headerRef = useRef<HTMLElement | null>(null);
   useEffect(() => {
     const onScroll = () => {
@@ -44,7 +38,7 @@ export default function Home() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // ===== Reveal-on-scroll
+  // Reveal-on-scroll
   useEffect(() => {
     const els = Array.from(document.querySelectorAll<HTMLElement>(".reveal"));
     if (!("IntersectionObserver" in window)) {
@@ -66,7 +60,7 @@ export default function Home() {
     return () => io.disconnect();
   }, []);
 
-  // ===== Active nav highlighting
+  // Active nav highlighting
   const sections: SectionId[] = useMemo(() => ["home", "about", "projects", "contact"], []);
   const [active, setActive] = useState<SectionId>("home");
   useEffect(() => {
@@ -90,7 +84,7 @@ export default function Home() {
 
   return (
     <>
-      <header ref={headerRef as any} className={styles.header} aria-label="Site header">
+      <header ref={headerRef} className={styles.header} aria-label="Site header">
         <a className={styles.brand} href="#home" aria-label="Go to top">
           Alkinoos Michalopoulos
         </a>
@@ -112,10 +106,13 @@ export default function Home() {
         {/* Hero */}
         <section id="home" className={`${styles.hero} reveal`} aria-labelledby="hero-title">
           <div className={styles.heroInner}>
-            <img
-              src="https://scontent-fra3-1.xx.fbcdn.net/v/t39.30808-6/542207886_818769453819604_7657809342489893473_n.jpg?stp=cp6_dst-jpg_tt6&_nc_cat=105&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=POIfizpTJVQQ7kNvwGM0GGj&_nc_oc=AdmQ5DnQ_1luLB3AhjW2_NX0Anzh_7WTUHuhMiN26uivHBVAu0b8QGTmyzoPRFTfOiE&_nc_zt=23&_nc_ht=scontent-fra3-1.xx&_nc_gid=KRH4OVBYSaggO8BjsJ4aJw&oh=00_AfY2lVKAjd0rHopxrGMQ6MQD9tkfZ3AIC9gCjhHlsFaogw&oe=68BFAC12"
-              alt="Your portrait"
+            <Image
+              src="/avatar.jpg"
+              alt="Alkan portrait"
+              width={220}
+              height={220}
               className={styles.avatar}
+              priority
             />
             <h1 id="hero-title">Hi, I’m Alkan 🧑🏼‍💻</h1>
             <p className={styles.tagline}>
@@ -147,11 +144,12 @@ export default function Home() {
           <h2 id="projects-title">Projects</h2>
           <div className={styles.grid}>
             <article className={`${styles.card} reveal`}>
-              <img
+              <Image
                 src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=800&auto=format&fit=crop"
                 alt="Project One"
+                width={800}
+                height={450}
                 className={styles.cardImg}
-                loading="lazy"
               />
               <div className={styles.cardBody}>
                 <h3>Project One</h3>
@@ -169,11 +167,12 @@ export default function Home() {
             </article>
 
             <article className={`${styles.card} reveal`}>
-              <img
+              <Image
                 src="https://images.unsplash.com/photo-1526481280698-8fcc13fd2401?q=80&w=800&auto=format&fit=crop"
                 alt="Project Two"
+                width={800}
+                height={450}
                 className={styles.cardImg}
-                loading="lazy"
               />
               <div className={styles.cardBody}>
                 <h3>Project Two</h3>
@@ -189,11 +188,12 @@ export default function Home() {
             </article>
 
             <article className={`${styles.card} reveal`}>
-              <img
+              <Image
                 src="https://images.unsplash.com/photo-1518779578993-ec3579fee39f?q=80&w=800&auto=format&fit=crop"
                 alt="Project Three"
+                width={800}
+                height={450}
                 className={styles.cardImg}
-                loading="lazy"
               />
               <div className={styles.cardBody}>
                 <h3>Project Three</h3>
@@ -220,11 +220,11 @@ export default function Home() {
                 collaborations, and coffee chats.
               </p>
               <p className={styles.contactLine}>
-                ✉️ <a href="mailto:alkinoos.m@outlook.com">alkinoos.m@outlook.com</a>
+                ✉️ <a href="mailto:you@example.com">you@example.com</a>
               </p>
               <p className={styles.contactLine}>
-                🐙 <a href="https://github.com/Alkan0">GitHub</a> &nbsp;|&nbsp; 💼{" "}
-                <a href="https://www.linkedin.com/in/alkinoos-michail-michalopoulos-tsesmetzis-4412a6262/">LinkedIn</a>
+                🐙 <a href="https://github.com/your">GitHub</a> &nbsp;|&nbsp; 💼{" "}
+                <a href="https://www.linkedin.com/in/your">LinkedIn</a>
               </p>
             </div>
             <form
@@ -273,7 +273,7 @@ export default function Home() {
       </aside>
 
       <footer className={`${styles.footer} reveal`}>
-        © {COPYRIGHT_YEAR} Alkinoos Michalopoulos — Built with Next.js
+        © {COPYRIGHT_YEAR} Your Name — Built with Next.js
       </footer>
     </>
   );
