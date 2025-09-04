@@ -101,6 +101,8 @@ export default function Home() {
           ))}
         </nav>
       </header>
+      <div className={styles.aura} aria-hidden="true" />
+
 
       <main id="home" className={styles.main}>
         {/* Hero */}
@@ -269,23 +271,22 @@ export default function Home() {
       </main>
 
       {/* Tiny floating style panel */}
-      <aside className={`${styles.stylePanel} reveal`} aria-label="Style controls">
-        <h4>Style</h4>
-        <div className={styles.row}>
-          <input
-            className={styles.range}
-            type="range"
-            min={0}
-            max={359}
-            value={hue}
-            onChange={(e) => setHue(parseInt(e.target.value, 10))}
-            aria-label="Accent hue"
-          />
-          <span className={styles.small}>{hue}</span>
-        </div>
-        <div className={styles.small}>
-          Drag the slider to change the accent color live.
-        </div>
+      {/* Style controls */}
+      <aside className={styles.stylePanel} aria-label="Style controls">
+        <input
+          className={styles.range}
+          type="range"
+          min={0}
+          max={359}
+          value={hue}
+          onChange={(e) => setHue(parseInt(e.target.value, 10))}
+          aria-label="Accent hue"
+        />
+        <span
+          className={styles.swatch}
+          style={{ backgroundColor: `hsl(${hue} 85% 72%)` }}
+          title={`Hue: ${hue}`}
+        />
       </aside>
 
       <footer className={`${styles.footer} reveal`}>
