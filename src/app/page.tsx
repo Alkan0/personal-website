@@ -88,13 +88,14 @@ export default function Home() {
         <a className={styles.brand} href="#home" aria-label="Go to top">
           Alkinoos Michalopoulos
         </a>
+
         <nav className={styles.nav} aria-label="Primary">
-          {sections.map((id) => (
+          {["home", "about", "projects", "contact"].map((id) => (
             <a
               key={id}
               href={`#${id}`}
-              className={active === id ? "active" : undefined}
-              aria-current={active === id ? "page" : undefined}
+              className={active === (id as any) ? "active" : undefined}
+              aria-current={active === (id as any) ? "page" : undefined}
             >
               {id.charAt(0).toUpperCase() + id.slice(1)}
             </a>
@@ -290,7 +291,7 @@ export default function Home() {
       </aside>
 
       <footer className={`${styles.footer} reveal`}>
-        © {COPYRIGHT_YEAR} Alkinoos Michalopoulos — Built with Next.js
+        © {COPYRIGHT_YEAR} Alkinoos Michalopoulos
       </footer>
     </>
   );

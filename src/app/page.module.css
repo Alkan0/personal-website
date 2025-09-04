@@ -1,31 +1,60 @@
-/* ----- Layout ----- */
-.main { max-width: 1120px; margin: 0 auto; padding: 24px 18px 96px; }
+/* ===================== Layout ===================== */
+.main {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 24px 18px 96px;
+  position: relative;
+  z-index: 1; /* above aura */
+}
 
-/* Header */
+/* ===================== Header ===================== */
 .header {
   position: sticky; top: 0; z-index: 50;
   display: flex; align-items: center; justify-content: space-between;
-  padding: 14px 18px; border-bottom: 1px solid var(--border);
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
   background: color-mix(in oklab, var(--bg) 92%, #000 8%);
   backdrop-filter: saturate(150%) blur(6px);
 }
 .brand { font-weight: 800; letter-spacing: -.01em; color: var(--text); text-decoration: none; }
-.main { 
-  max-width: 1120px; 
-  margin: 0 auto; 
-  padding: 24px 18px 96px; 
-  position: relative; 
-  z-index: 1; 
+
+/* Always-visible nav (compact on small screens) */
+.nav {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.nav a {
+  color: var(--muted);
+  padding: 6px 8px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-size: 14px;
+  line-height: 1;
+}
+.nav a:hover { background: var(--accent); color: var(--text); }
+.nav a.active { color: var(--text); }
+
+/* Wider spacing & size on desktop */
+@media (min-width: 768px) {
+  .nav { gap: 14px; }
+  .nav a { font-size: 15px; padding: 8px 10px; }
 }
 
-/* ===== Color Aura (reacts to --brand from the slider) ===== */
+/* Remove old hamburger/panel if JSX still exists */
+.menuBtn, .mobileNav { display: none !important; }
+
+/* Header elevation helper (toggled by JS) */
+.elevate {}
+.header.elevate { box-shadow: 0 10px 24px rgba(0,0,0,.25); }
+
+/* ===================== Aura Background ===================== */
 .aura {
   position: fixed;
-  inset: 0;             /* full viewport */
-  pointer-events: none; /* clicks pass through */
-  z-index: 0;           /* sit under header/main (which have higher z-index) */
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
 }
-
 .aura::before,
 .aura::after {
   content: "";
@@ -35,8 +64,6 @@
   opacity: .40;
   animation: float 16s ease-in-out infinite;
 }
-
-/* Top-left glow */
 .aura::before {
   width: 60vmax; height: 60vmax;
   top: -15vmax; left: -15vmax;
@@ -44,8 +71,6 @@
     color-mix(in oklab, var(--brand) 55%, transparent) 0%,
     transparent 60%);
 }
-
-/* Bottom-right glow */
 .aura::after {
   width: 55vmax; height: 55vmax;
   right: -12vmax; bottom: -12vmax;
@@ -54,53 +79,16 @@
     transparent 60%);
   animation-delay: -6s;
 }
-
-/* Gentle motion */
 @keyframes float {
   0%   { transform: translate3d(0,0,0) scale(1); }
   50%  { transform: translate3d(2vmax, -1vmax, 0) scale(1.05); }
   100% { transform: translate3d(0,0,0) scale(1); }
 }
-
-/* Respect reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .aura::before, .aura::after { animation: none; }
 }
-/* Desktop nav (hidden on mobile) */
-.nav { display: none; }                 /* mobile default: hidden */
-@media (min-width: 768px) {
-  .nav { display: flex; gap: 14px; }    /* desktop: flex + spacing */
-}
-.nav a {
-  color: var(--muted); padding: 8px 10px; border-radius: 10px; text-decoration: none;
-}
-.nav a:hover { background: var(--accent); color: var(--text); }
-.nav a.active { color: var(--text); }
 
-/* Mobile menu button (hidden on desktop) */
-.menuBtn {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 38px; height: 38px; border-radius: 10px; border: 1px solid var(--border);
-  background: transparent; color: var(--text); cursor: pointer;
-}
-.menuBtn:hover { background: var(--accent); }
-@media (min-width: 768px) { .menuBtn { display: none; } }
-
-/* Mobile menu panel */
-.mobileNav {
-  position: fixed; inset: 60px 14px auto 14px; z-index: 55;
-  background: var(--card); border: 1px solid var(--border); border-radius: 14px;
-  display: grid; gap: 6px; padding: 10px;
-  box-shadow: 0 10px 28px rgba(0,0,0,.35);
-}
-.mobileNav a { padding: 10px 12px; border-radius: 10px; color: var(--text); text-decoration: none; }
-.mobileNav a:hover { background: var(--accent); }
-
-/* Header elevation helper (JS toggles this class) */
-.elevate { } /* keep so styles.elevate exists */
-.header.elevate { box-shadow: 0 10px 24px rgba(0,0,0,.25); }
-
-/* ----- Hero ----- */
+/* ===================== Hero ===================== */
 .hero { padding: 56px 0 40px; text-align: center; }
 @media (min-width: 768px) { .hero { padding: 72px 0 56px; } }
 
@@ -125,7 +113,7 @@
 .secondaryBtn { background: transparent; color: var(--text); }
 @media (max-width: 420px) { .ctaRow a { width: 100%; } }
 
-/* ----- Sections ----- */
+/* ===================== Sections ===================== */
 .section { padding: 40px 0; }
 @media (min-width: 768px) { .section { padding: 56px 0; } }
 .section h2 { font-size: clamp(22px, 4vw, 32px); margin-bottom: 12px; }
@@ -146,10 +134,7 @@
 .cardBody h3 { margin: 2px 0 6px; font-size: 18px; }
 .cardBody p { color: var(--muted); font-size: 14px; }
 .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
-.tags span {
-  font-size: 12px; padding: 4px 8px; border-radius: 999px;
-  border: 1px solid var(--border); background: #0f1117;
-}
+.tags span { font-size: 12px; padding: 4px 8px; border-radius: 999px; border: 1px solid var(--border); background: #0f1117; }
 .links { display: flex; gap: 12px; margin-top: 12px; }
 .links a { color: var(--brand); text-decoration: none; }
 .links a:hover { text-decoration: underline; }
@@ -175,7 +160,8 @@
 
 /* Footer */
 .footer {
-  border-top: 1px solid var(--border); padding: 18px; text-align: center; color: var(--muted);
+  border-top: 1px solid var(--border);
+  padding: 18px; text-align: center; color: var(--muted);
   background: color-mix(in oklab, var(--bg) 88%, #000 12%);
 }
 
@@ -183,76 +169,32 @@
 .reveal { opacity: 0; transform: translateY(14px); transition: opacity .55s ease, transform .55s ease; }
 .reveal.in { opacity: 1; transform: translateY(0); }
 @media (prefers-reduced-motion: reduce) { .reveal, .reveal.in { transition: none; transform: none; opacity: 1; } }
-/* Style slider panel */
-/* ===== Style slider — ultra compact bottom-left ===== */
-/* ===== Super minimal style panel ===== */
+
+/* ===================== Tiny Bottom-left Slider ===================== */
 .stylePanel {
-  position: fixed;
-  bottom: 12px;
-  left: 12px;
-  z-index: 60;
-
-  display: flex;
-  align-items: center;
-  gap: 6px;
-
-  padding: 6px 8px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
-  background: var(--card);
-  box-shadow: 0 3px 8px rgba(0,0,0,.25);
-
-  width: auto;
+  position: fixed; bottom: 12px; left: 12px; z-index: 60;
+  display: flex; align-items: center; gap: 6px;
+  padding: 6px 8px; border-radius: 10px;
+  border: 1px solid var(--border); background: var(--card);
+  box-shadow: 0 3px 8px rgba(0,0,0,.25); width: auto;
 }
 
-/* Compact range slider */
-/* Compact hue slider */
+/* Compact hue slider (no platform glyphs) */
 .range {
-  width: 100px;
-  height: 4px;
-  -webkit-appearance: none; /* reset Safari/iOS */
-  appearance: none;
-  background: linear-gradient(
-    to right,
-    red 0deg,
-    yellow 60deg,
-    lime 120deg,
-    cyan 180deg,
-    blue 240deg,
-    magenta 300deg,
-    red 360deg
-  );
-  border-radius: 999px;
-  outline: none;
-  cursor: pointer;
+  width: 100px; height: 4px;
+  -webkit-appearance: none; appearance: none;
+  background: linear-gradient(to right, red 0deg, yellow 60deg, lime 120deg, cyan 180deg, blue 240deg, magenta 300deg, red 360deg);
+  border-radius: 999px; outline: none; cursor: pointer;
 }
-
-/* Chrome / Edge / Safari thumb */
 .range::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: var(--brand);
-  border: 2px solid #000;
-  cursor: grab;
+  -webkit-appearance: none; appearance: none;
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--brand); border: 2px solid #000; cursor: grab;
 }
-
-/* Firefox thumb */
 .range::-moz-range-thumb {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: var(--brand);
-  border: 2px solid #000;
-  cursor: grab;
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--brand); border: 2px solid #000; cursor: grab;
 }
 
 /* Tiny swatch preview */
-.swatch {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  border: 1px solid var(--border);
-}
+.swatch { width: 14px; height: 14px; border-radius: 50%; border: 1px solid var(--border); }
