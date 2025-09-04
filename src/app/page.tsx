@@ -220,11 +220,11 @@ export default function Home() {
                 collaborations, and coffee chats.
               </p>
               <p className={styles.contactLine}>
-                ✉️ <a href="mailto:you@example.com">you@example.com</a>
+                ✉️ <a href="mailto:alkinoos.m@outlook.com">alkinoos.m@outlook.com</a>
               </p>
               <p className={styles.contactLine}>
-                🐙 <a href="https://github.com/your">GitHub</a> &nbsp;|&nbsp; 💼{" "}
-                <a href="https://www.linkedin.com/in/your">LinkedIn</a>
+                🐙 <a href="https://github.com/Alkan0">GitHub</a> &nbsp;|&nbsp; 💼{" "}
+                <a href="https://www.linkedin.com/in/alkinoos-michail-michalopoulos-tsesmetzis-4412a6262/">LinkedIn</a>
               </p>
             </div>
             <form
@@ -273,7 +273,7 @@ export default function Home() {
       </aside>
 
       <footer className={`${styles.footer} reveal`}>
-        © {COPYRIGHT_YEAR} Your Name — Built with Next.js
+        © {COPYRIGHT_YEAR} Alkinoos Michalopoulos — Built with Next.js
       </footer>
     </>
   );
