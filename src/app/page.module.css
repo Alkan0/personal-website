@@ -202,3 +202,42 @@
 
 /* Tiny swatch preview */
 .swatch { width: 14px; height: 14px; border-radius: 50%; border: 1px solid var(--border); }
+
+/* ===== Timeline ===== */
+.timeline {
+  position: relative;
+  margin: 20px 0 0 20px;
+  padding-left: 20px;
+  border-left: 2px solid var(--border);
+}
+
+.entry {
+  position: relative;
+  margin-bottom: 24px;
+}
+
+.dot {
+  position: absolute;
+  left: -32px;
+  top: 6px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--brand);       /* dynamic accent */
+  border: 2px solid var(--bg);    /* contrast ring */
+  box-shadow: 0 0 6px color-mix(in oklab, var(--brand) 70%, transparent);
+}
+
+.entryContent h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.entryContent p {
+  margin: 2px 0 0;
+  font-size: 14px;
+  color: var(--muted);
+}
+

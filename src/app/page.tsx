@@ -5,7 +5,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import styles from "./page.module.css";
 
-type SectionId = "home" | "about" | "projects" | "contact";
+type SectionId = "home" | "about" | "experience" | "projects" | "contact";
 
 const COPYRIGHT_YEAR = 2025;
 
@@ -61,7 +61,10 @@ export default function Home() {
   }, []);
 
   // Active nav highlighting
-  const sections: SectionId[] = useMemo(() => ["home", "about", "projects", "contact"], []);
+const sections: SectionId[] = useMemo(
+  () => ["home", "about", "experience", "projects", "contact"],
+  []
+);
   const [active, setActive] = useState<SectionId>("home");
   useEffect(() => {
     const observers: IntersectionObserver[] = [];
@@ -90,7 +93,7 @@ export default function Home() {
         </a>
 
         <nav className={styles.nav} aria-label="Primary">
-          {["home", "about", "projects", "contact"].map((id) => (
+          {["home", "about", "experience", "projects", "contact"].map((id) => (
             <a
               key={id}
               href={`#${id}`}
@@ -158,6 +161,40 @@ export default function Home() {
           </p>
         </section>
 
+        {/* Experience */}
+        <section id="experience" className={`${styles.section} reveal`} aria-labelledby="experience-title">
+          <h2 id="experience-title">Experience</h2>
+          <div className={styles.timeline}>
+            <div className={styles.entry}>
+              <div className={styles.dot} />
+              <div className={styles.entryContent}>
+                <h3>Information Technology Consultant</h3>
+                <p>EY — Apr 2025 – Present</p>
+              </div>
+            </div>
+            <div className={styles.entry}>
+              <div className={styles.dot} />
+              <div className={styles.entryContent}>
+                <h3>Junior Web Developer</h3>
+                <p>COVARIANCE P.C. — Sep 2024 – Apr 2025</p>
+              </div>
+            </div>
+            <div className={styles.entry}>
+              <div className={styles.dot} />
+              <div className={styles.entryContent}>
+                <h3>Web Development Intern</h3>
+                <p>COVARIANCE P.C. — Jul 2024 – Sep 2024</p>
+              </div>
+            </div>
+            <div className={styles.entry}>
+              <div className={styles.dot} />
+              <div className={styles.entryContent}>
+                <h3>Robotics Laboratory Manager</h3>
+                <p>University of the Aegean — Feb 2024 – Jul 2024</p>
+              </div>
+            </div>
+          </div>
+        </section>
         {/* Projects */}
         <section id="projects" className={`${styles.section} reveal`} aria-labelledby="projects-title">
           <h2 id="projects-title">Projects</h2>
