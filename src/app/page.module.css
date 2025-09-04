@@ -1,0 +1,92 @@
+/* page.module.css — module-scoped styles (local classes only) */
+
+.header {
+  position: sticky; top: 0; z-index: 50;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 18px; border-bottom: 1px solid var(--border);
+  background: color-mix(in oklab, var(--bg) 88%, #000 12%);
+  backdrop-filter: saturate(150%) blur(6px);
+}
+
+.brand { font-weight: 700; letter-spacing: -0.01em; color: var(--text); }
+
+.nav { display: flex; gap: 14px; }
+.nav a { color: var(--muted); padding: 6px 10px; border-radius: 10px; }
+.nav a:hover { background: var(--accent); color: var(--text); }
+
+.main { max-width: 1120px; margin: 0 auto; padding: 24px 18px 80px; }
+
+.hero { padding: 64px 0; display: grid; place-items: center; text-align: center; }
+.heroInner { max-width: 820px; }
+
+.avatar {
+  width: 96px; height: 96px; border-radius: 20px; object-fit: cover;
+  border: 1px solid var(--border); margin-bottom: 16px;
+}
+
+.hero h1 { font-size: clamp(28px, 5vw, 44px); margin: 8px 0 6px; }
+.tagline { color: var(--muted); font-size: clamp(14px, 2.5vw, 18px); }
+
+.ctaRow { display: flex; gap: 12px; justify-content: center; margin-top: 18px; flex-wrap: wrap; }
+.primaryBtn, .secondaryBtn {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 10px 14px; border-radius: 12px; border: 1px solid var(--border);
+}
+.primaryBtn { background: var(--brand); color: #0b0b0c; font-weight: 700; }
+.secondaryBtn { background: transparent; color: var(--text); }
+.primaryBtn:hover { filter: brightness(0.95); }
+.secondaryBtn:hover { background: var(--accent); }
+
+.section { padding: 48px 0; }
+.section h2 { font-size: clamp(22px, 4vw, 30px); margin-bottom: 12px; }
+.bullets { margin: 10px 0 0 0; padding-left: 18px; color: var(--muted); }
+.bullets li { margin: 6px 0; }
+
+.grid {
+  display: grid; gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+.card {
+  background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+  overflow: hidden; transition: transform .2s ease, box-shadow .2s ease;
+}
+.card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(0,0,0,.25); }
+.cardImg { width: 100%; aspect-ratio: 16/9; object-fit: cover; }
+.cardBody { padding: 14px; }
+.cardBody h3 { margin: 2px 0 6px; font-size: 18px; }
+.cardBody p { color: var(--muted); font-size: 14px; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.tags span {
+  font-size: 12px; padding: 4px 8px; border-radius: 999px;
+  border: 1px solid var(--border); background: #0f1117;
+}
+.links { display: flex; gap: 12px; margin-top: 12px; }
+.links a { color: var(--brand); }
+.links a:hover { text-decoration: underline; }
+
+.contactWrap { display: grid; gap: 16px; grid-template-columns: 1fr; }
+@media (min-width: 840px) {
+  .contactWrap { grid-template-columns: 1.2fr 1fr; }
+}
+.contactLine a { color: var(--text); border-bottom: 1px dashed var(--border); }
+.contactLine a:hover { color: var(--brand); border-bottom-color: var(--brand); }
+
+.form {
+  background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+  padding: 14px;
+}
+.form label { display: grid; gap: 6px; margin-bottom: 10px; }
+.form input, .form textarea {
+  width: 100%; background: #0f1117; color: var(--text);
+  border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px;
+}
+.form button {
+  width: 100%; padding: 12px; border-radius: 12px; border: none;
+  background: var(--brand); color: #0b0b0c; font-weight: 700; cursor: pointer;
+}
+.form button:hover { filter: brightness(0.95); }
+
+.footer {
+  border-top: 1px solid var(--border); padding: 18px; text-align: center; color: var(--muted);
+  background: color-mix(in oklab, var(--bg) 88%, #000 12%);
+}
