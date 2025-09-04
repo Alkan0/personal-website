@@ -96,9 +96,17 @@
 .avatar {
   width: clamp(120px, 22vw, 200px);
   height: clamp(120px, 22vw, 200px);
-  border-radius: 28px; object-fit: cover;
-  border: 1px solid var(--border); margin: 0 auto 20px;
+  border-radius: 28px;
+  object-fit: cover;
+  border: 1px solid var(--border);
+  margin: 0 auto 20px;
   box-shadow: 0 8px 28px rgba(0,0,0,.35);
+  animation: floatAvatar 6s ease-in-out infinite;
+}
+
+@keyframes floatAvatar {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
 }
 .hero h1 { font-size: clamp(30px, 5vw, 48px); margin: 8px 0 6px; }
 .tagline { color: var(--muted); font-size: clamp(14px, 2.5vw, 18px); }
@@ -170,8 +178,15 @@
 }
 
 /* Reveal animation */
-.reveal { opacity: 0; transform: translateY(14px); transition: opacity .55s ease, transform .55s ease; }
-.reveal.in { opacity: 1; transform: translateY(0); }
+.reveal {
+  opacity: 0;
+  transform: translateY(30px) scale(0.98);
+  transition: opacity .7s ease, transform .7s ease;
+}
+.reveal.in {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
 @media (prefers-reduced-motion: reduce) { .reveal, .reveal.in { transition: none; transform: none; opacity: 1; } }
 
 /* ===================== Tiny Bottom-left Slider ===================== */
@@ -225,9 +240,13 @@
   border-radius: 50%;
   background: var(--brand);       /* dynamic accent */
   border: 2px solid var(--bg);    /* contrast ring */
-  box-shadow: 0 0 6px color-mix(in oklab, var(--brand) 70%, transparent);
+  box-shadow: 0 0 8px color-mix(in oklab, var(--brand) 70%, transparent);
+  animation: pulseDot 2.5s infinite ease-in-out;
 }
-
+@keyframes pulseDot {
+  0%, 100% { box-shadow: 0 0 6px color-mix(in oklab, var(--brand) 60%, transparent); }
+  50% { box-shadow: 0 0 14px color-mix(in oklab, var(--brand) 90%, transparent); }
+}
 .entryContent h3 {
   margin: 0;
   font-size: 16px;
