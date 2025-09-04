@@ -5,7 +5,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import styles from "./page.module.css";
 
-type SectionId = "home" | "about" | "experience" | "projects" | "contact";
+const NAV_SECTIONS = ["home", "about", "experience", "projects", "contact"] as const;
+type SectionId = typeof NAV_SECTIONS[number];
 
 const COPYRIGHT_YEAR = 2025;
 
@@ -61,10 +62,10 @@ export default function Home() {
   }, []);
 
   // Active nav highlighting
-const sections: SectionId[] = useMemo(
-  () => ["home", "about", "experience", "projects", "contact"],
-  []
-);
+  const sections: SectionId[] = useMemo(
+    () => ["home", "about", "experience", "projects", "contact"],
+    []
+  );
   const [active, setActive] = useState<SectionId>("home");
   useEffect(() => {
     const observers: IntersectionObserver[] = [];
@@ -93,12 +94,12 @@ const sections: SectionId[] = useMemo(
         </a>
 
         <nav className={styles.nav} aria-label="Primary">
-          {["home", "about", "experience", "projects", "contact"].map((id) => (
+          {sections.map((id) => (
             <a
               key={id}
               href={`#${id}`}
-              className={active === (id as any) ? "active" : undefined}
-              aria-current={active === (id as any) ? "page" : undefined}
+              className={active === id ? "active" : undefined}
+              aria-current={active === id ? "page" : undefined}
             >
               {id.charAt(0).toUpperCase() + id.slice(1)}
             </a>
