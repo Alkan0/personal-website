@@ -161,8 +161,12 @@
 /* Footer */
 .footer {
   border-top: 1px solid var(--border);
-  padding: 18px; text-align: center; color: var(--muted);
+  padding: 14px;                 /* a bit tighter padding */
+  text-align: center;
+  color: var(--muted);
   background: color-mix(in oklab, var(--bg) 88%, #000 12%);
+  font-size: 12px;               /* smaller text */
+  line-height: 1.4;
 }
 
 /* Reveal animation */
