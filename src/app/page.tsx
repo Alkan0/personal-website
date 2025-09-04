@@ -16,12 +16,12 @@ export default function Home() {
     try {
       const saved = localStorage.getItem("accent-hue");
       if (saved) setHue(parseInt(saved, 10));
-    } catch {}
+    } catch { }
   }, []);
   useEffect(() => {
     const brand = `hsl(${hue} 85% 72%)`;
     document.documentElement.style.setProperty("--brand", brand);
-    try { localStorage.setItem("accent-hue", String(hue)); } catch {}
+    try { localStorage.setItem("accent-hue", String(hue)); } catch { }
   }, [hue]);
 
   // Header elevation on scroll
@@ -129,14 +129,30 @@ export default function Home() {
         <section id="about" className={`${styles.section} reveal`} aria-labelledby="about-title">
           <h2 id="about-title">About</h2>
           <p>
-            Write 2–3 short paragraphs about your background, specialties, and the kinds of
-            problems you love solving. Keep it friendly and skimmable.
+            I’m a <strong>Full Stack & Cloud Engineer</strong> at <strong>Piraeus Bank</strong>, focused on building
+            mission-critical financial systems with a keen eye on scalability, reliability, and security.
+            I thrive on crafting robust back-end services, architecting secure cloud infrastructure, and
+            delivering polished features from idea to production.
+          </p>
+
+          <p>
+            What drives me:
           </p>
           <ul className={styles.bullets}>
-            <li>🌟 Focus: Frontend, Backend, Data, AI</li>
-            <li>🛠️ Tools: React, TypeScript, Node, Python</li>
-            <li>📍 Location: City, Country</li>
+            <li>✨ Engineering elegance — clean code, modular design, and clear interfaces</li>
+            <li>⚡ Infrastructure resilience — designing systems that scale and stay reliable</li>
+            <li>🔒 Security-first thinking — protecting sensitive data and reducing risk</li>
+            <li>🚀 End-to-end ownership — taking features from spec to user delight</li>
           </ul>
+
+          <p>
+            Technologies I work with include cloud platforms (AWS / Azure), <strong>C#</strong>, Node.js, Python, React,
+            SQL/NoSQL databases, CI/CD pipelines, containerization, and infrastructure-as-code.
+          </p>
+
+          <p>
+            Let’s connect, build something powerful, and make systems that users — and businesses — can trust!
+          </p>
         </section>
 
         {/* Projects */}
@@ -220,11 +236,11 @@ export default function Home() {
                 collaborations, and coffee chats.
               </p>
               <p className={styles.contactLine}>
-                ✉️ <a href="mailto:you@example.com">you@example.com</a>
+                ✉️ <a href="mailto:alkinoos.m@outlook.com">alkinoos.m@outlook.com</a>
               </p>
               <p className={styles.contactLine}>
-                🐙 <a href="https://github.com/your">GitHub</a> &nbsp;|&nbsp; 💼{" "}
-                <a href="https://www.linkedin.com/in/your">LinkedIn</a>
+                🐙 <a href="https://github.com/Alkan0">GitHub</a> &nbsp;|&nbsp; 💼{" "}
+                <a href="https://www.linkedin.com/in/alkinoos-michail-michalopoulos-tsesmetzis-4412a6262/">LinkedIn</a>
               </p>
             </div>
             <form
@@ -273,7 +289,7 @@ export default function Home() {
       </aside>
 
       <footer className={`${styles.footer} reveal`}>
-        © {COPYRIGHT_YEAR} Your Name — Built with Next.js
+        © {COPYRIGHT_YEAR} Alkinoos Michalopoulos — Built with Next.js
       </footer>
     </>
   );
