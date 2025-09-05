@@ -9,9 +9,14 @@ const poppins = Poppins({
   variable: "--font-poppins",
 });
 
-export const metadata: Metadata = {
-  title: "Alkan's Personal Site",
+// src/app/layout.tsx
+export const metadata = {
+  title: "Alkinoos Michalopoulos Portfolio",
   description: "Portfolio and projects of Alkinoos Michalopoulos",
+  icons: {
+    icon: "/icon.svg",
+    apple: "/apple-touch-icon.png",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
