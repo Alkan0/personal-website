@@ -62,10 +62,8 @@ export default function Home() {
   }, []);
 
   // Active nav highlighting
-  const sections: SectionId[] = useMemo(
-    () => ["home", "about", "experience", "projects", "contact"],
-    []
-  );
+  const sections: readonly SectionId[] = NAV_SECTIONS; // use the value so it's not “type-only”
+
   const [active, setActive] = useState<SectionId>("home");
   useEffect(() => {
     const observers: IntersectionObserver[] = [];
@@ -116,10 +114,10 @@ export default function Home() {
     window.addEventListener("scroll", onScroll, { passive: true });
 
     return () => {
-      window.removeEventListener("pointermove", onMove as any);
-      window.removeEventListener("scroll", onScroll as any);
-      cancelAnimationFrame(raf);
-    };
+  window.removeEventListener("pointermove", onMove);
+  window.removeEventListener("scroll", onScroll);
+  cancelAnimationFrame(raf);
+};
   }, []);
 
   // Slow continuous rotation (very subtle)
@@ -157,6 +155,7 @@ export default function Home() {
             </a>
           ))}
         </nav>
+
       </header>
       <div className={styles.aura} aria-hidden="true" />
 
