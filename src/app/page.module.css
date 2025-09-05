@@ -257,6 +257,16 @@
   border-left: 2px solid var(--border);
 }
 
+/* hide the line after the last dot */
+.entry:last-child::after {
+  content: "";
+  position: absolute;
+  top: calc(0.8em); /* same vertical as the dot */
+  left: 20px;
+  width: 2px;
+  height: calc(100% - 0.8em);
+  background: var(--bg); /* overwrites the line with bg color */
+}
 .entry {
   position: relative;
   margin-bottom: 24px;
@@ -290,4 +300,27 @@
   font-size: 14px;
   color: var(--muted);
 }
+.cvDownload {
+  margin-top: 20px;
+  margin-left: 40px;  /* aligns with timeline text */
+}
 
+.cvDownload a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background .2s ease, color .2s ease;
+}
+
+.cvDownload a:hover {
+  background: var(--accent);
+  color: var(--brand);
+}

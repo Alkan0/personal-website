@@ -247,7 +247,15 @@ export default function Home() {
               </div>
             </div>
           </div>
+          {/* CV Download under the line */}
+          <div className={styles.cvDownload}>
+            <a href="/cv.pdf" download className={styles.secondaryBtn}>
+              Download CV
+            </a>
+          </div>
+
         </section>
+
         {/* Projects */}
         <section id="projects" className={`${styles.section} reveal`} aria-labelledby="projects-title">
           <h2 id="projects-title">Projects</h2>
