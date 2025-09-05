@@ -85,7 +85,59 @@ export default function Home() {
     });
     return () => observers.forEach((o) => o.disconnect());
   }, [sections]);
+  useEffect(() => {
+    let raf = 0;
+    const root = document.documentElement;
 
+    const update = (xPct: number, yPct: number) => {
+      root.style.setProperty("--aura-x", (xPct * 2 - 1).toFixed(3)); // -1..1
+      root.style.setProperty("--aura-y", (yPct * 2 - 1).toFixed(3)); // -1..1
+    };
+
+    const onMove = (e: PointerEvent) => {
+      if (!window.innerWidth || !window.innerHeight) return;
+      const xPct = e.clientX / window.innerWidth;
+      const yPct = e.clientY / window.innerHeight;
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => update(xPct, yPct));
+    };
+
+    const onScroll = () => {
+      // small vertical influence from scroll position
+      const yPct = Math.min(1, Math.max(0, window.scrollY / (document.body.scrollHeight - window.innerHeight || 1)));
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        // keep x as center (0.5), nudge y based on scroll
+        update(0.5, yPct);
+      });
+    };
+
+    window.addEventListener("pointermove", onMove, { passive: true });
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("pointermove", onMove as any);
+      window.removeEventListener("scroll", onScroll as any);
+      cancelAnimationFrame(raf);
+    };
+  }, []);
+
+  // Slow continuous rotation (very subtle)
+  useEffect(() => {
+    let raf = 0;
+    const root = document.documentElement;
+    const start = performance.now();
+
+    const tick = (t: number) => {
+      const elapsed = (t - start) / 1000;        // seconds
+      const deg = (elapsed * 4) % 360;           // 4°/s
+      root.style.setProperty("--aura-rot", `${deg}deg`);
+      raf = requestAnimationFrame(tick);
+    };
+
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, []);
   return (
     <>
       <header ref={headerRef} className={styles.header} aria-label="Site header">
