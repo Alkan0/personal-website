@@ -11,7 +11,7 @@ const poppins = Poppins({
 
 // src/app/layout.tsx
 export const metadata = {
-  title: "Alkinoos Michalopoulos Portfolio",
+  title: "Alkinoos Michalopoulos",
   description: "Portfolio and projects of Alkinoos Michalopoulos",
   icons: {
     icon: "/icon.svg",
@@ -19,10 +19,12 @@ export const metadata = {
   },
 };
 
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${poppins.variable}`}>
+      {/* ⚡️ περνάμε και τα δύο */}
+      <body className={`${poppins.variable} ${inter.variable}`}>
         {children}
       </body>
     </html>

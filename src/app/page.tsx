@@ -114,10 +114,10 @@ export default function Home() {
     window.addEventListener("scroll", onScroll, { passive: true });
 
     return () => {
-  window.removeEventListener("pointermove", onMove);
-  window.removeEventListener("scroll", onScroll);
-  cancelAnimationFrame(raf);
-};
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(raf);
+    };
   }, []);
 
   // Slow continuous rotation (very subtle)
@@ -174,7 +174,8 @@ export default function Home() {
             />
             <h1 id="hero-title">Hi, I’m Alkan 🧑🏼‍💻</h1>
             <p className={styles.tagline}>
-              I’m a Full Stack and Cloud Engineer working on enterprise-grade financial applications at Piraeus Bank. I focus on building scalable systems, designing secure cloud infrastructure, and delivering software from start to finish.
+              Welcome to my world 🌍 <br/> I love turning ideas into code,
+              exploring new technologies, and building things that make an impact.
             </p>
             <div className={styles.ctaRow}>
               <a className={styles.primaryBtn} href="#projects">View Projects</a>
@@ -204,7 +205,7 @@ export default function Home() {
           </ul>
 
           <p>
-            Technologies I work with include cloud platforms (AWS / Azure), <strong>C#</strong>, Node.js, Python, React,
+            Technologies I work with include cloud platforms (AWS / Azure),C#, Node.js, Python, React,
             SQL/NoSQL databases, CI/CD pipelines, containerization, and infrastructure-as-code.
           </p>
 
