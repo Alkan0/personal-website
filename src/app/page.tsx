@@ -176,8 +176,6 @@ export default function Home() {
     <>
       <div className={styles.aura} aria-hidden="true" />
       <header ref={headerRef} className={styles.header} aria-label="Site header">
-
-
         <a className={styles.brand} href="#home" aria-label="Go to top">
           Alkinoos Michalopoulos
         </a>
@@ -196,13 +194,14 @@ export default function Home() {
           ))}
         </nav>
 
-        {/* Hamburger button (visible on mobile) */}
+        {/* Hamburger button (visible on <1024px) */}
         <button
+          ref={menuBtnRef}
           className={styles.menuBtn}
           aria-label="Toggle menu"
           aria-expanded={menuOpen}
           aria-controls="mobile-nav"
-          onClick={() => setMenuOpen((v) => !v)}
+          onClick={() => setMenuOpen(v => !v)}
         >
           {menuOpen ? "✕" : "☰"}
         </button>
@@ -215,7 +214,13 @@ export default function Home() {
               onClick={() => setMenuOpen(false)}
               aria-hidden="true"
             />
-            <div id="mobile-nav" className={styles.mobileNav} role="dialog" aria-label="Mobile navigation">
+            <div
+              id="mobile-nav"
+              ref={mobileNavRef}
+              className={styles.mobileNav}
+              role="dialog"
+              aria-label="Mobile navigation"
+            >
               {sections.map((id) => (
                 <a key={id} href={`#${id}`} onClick={() => setMenuOpen(false)}>
                   {id.charAt(0).toUpperCase() + id.slice(1)}
@@ -225,7 +230,6 @@ export default function Home() {
           </>
         )}
       </header>
-
 
       <main id="home" className={styles.main}>
         {/* Hero */}
