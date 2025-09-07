@@ -324,3 +324,125 @@
   background: var(--accent);
   color: var(--brand);
 }
+/* ===== About — modern cards with circular icon & chips ===== */
+.techGrid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: 1fr;
+  margin-top: 14px;
+}
+@media (min-width: 720px) {
+  .techGrid { grid-template-columns: 1fr 1fr; }
+}
+@media (min-width: 1080px) {
+  .techGrid { grid-template-columns: 1fr 1fr 1fr; }
+}
+
+.techCard {
+  display: grid;
+  grid-template-columns: 54px 1fr;
+  gap: 12px;
+  align-items: center;
+  padding: 14px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+.techCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0,0,0,.28);
+  border-color: color-mix(in oklab, var(--brand) 35%, var(--border));
+}
+
+/* circular icon with animated accent ring */
+.techIcon {
+  width: 54px; height: 54px;
+  border-radius: 999px;
+  display: grid; place-items: center;
+  font-weight: 700;
+  background:
+    radial-gradient(closest-side, color-mix(in oklab, var(--brand) 22%, transparent) 0%, transparent 65%),
+    #0f1117;
+  color: var(--text);
+  position: relative;
+  isolation: isolate;
+}
+.techIcon::before {
+  content: "";
+  position: absolute; inset: -2px;
+  border-radius: inherit;
+  background: conic-gradient(from 0deg, var(--brand), transparent 40%, var(--brand));
+  filter: blur(6px);
+  opacity: .45;
+  z-index: -1;
+}
+
+/* title + chips */
+.techTitle {
+  margin: 0 0 6px 0;
+  font-size: 15px;
+  font-weight: 700;
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.chips span {
+  font-size: 12px;
+  padding: 6px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: #0f1117;
+  color: var(--text);
+  white-space: nowrap;
+  transition: background .15s ease, border-color .15s ease, color .15s ease;
+}
+.chips span:hover {
+  background: color-mix(in oklab, var(--brand) 18%, #0f1117);
+  border-color: color-mix(in oklab, var(--brand) 40%, var(--border));
+}
+.techIcon {
+  font-size: 16px; /* affects text like </> */
+}
+.techIcon svg {
+  width: 20px;
+  height: 20px;
+}
+/* Hide desktop nav on widths < 1024px */
+@media (max-width: 1023px) {
+  .nav { display: none; }
+}
+
+/* Show hamburger on widths < 1024px */
+.menuBtn {
+  display: none;
+  align-items: center; justify-content: center;
+  width: 38px; height: 38px;
+  border-radius: 10px; border: 1px solid var(--border);
+  background: transparent; color: var(--text); cursor: pointer;
+}
+.menuBtn:hover { background: var(--accent); }
+@media (max-width: 1023px) { .menuBtn { display: inline-flex; } }
+
+/* Scrim + mobile menu UI (unchanged) */
+.scrim {
+  position: fixed; inset: 0; z-index: 70;
+  background: rgba(0,0,0,.45);
+  backdrop-filter: blur(2px);
+}
+.mobileNav {
+  position: fixed; left: 12px; right: 12px; top: 64px; z-index: 80;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 10px;
+  display: grid; gap: 6px;
+  box-shadow: 0 12px 28px rgba(0,0,0,.35);
+}
+.mobileNav a {
+  padding: 10px 12px; border-radius: 10px;
+  color: var(--text); text-decoration: none;
+}
+.mobileNav a:hover { background: var(--accent); }

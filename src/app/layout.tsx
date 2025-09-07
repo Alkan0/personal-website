@@ -1,16 +1,15 @@
+// src/app/layout.tsx
 import type { Metadata } from "next";
 import "./globals.css";
-import { Inter, Poppins } from "next/font/google";
+import { Poppins } from "next/font/google";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const poppins = Poppins({
   weight: ["400", "600", "700"],
   subsets: ["latin"],
-  variable: "--font-poppins",
+  variable: "--font-sans",
 });
 
-// src/app/layout.tsx
-export const metadata = {
+export const metadata: Metadata = {
   title: "Alkinoos Michalopoulos",
   description: "Portfolio and projects of Alkinoos Michalopoulos",
   icons: {
@@ -19,14 +18,10 @@ export const metadata = {
   },
 };
 
-
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      {/* ⚡️ περνάμε και τα δύο */}
-      <body className={`${poppins.variable} ${inter.variable}`}>
-        {children}
-      </body>
+    <html lang="en" className={poppins.variable}>
+      <body>{children}</body>
     </html>
   );
 }

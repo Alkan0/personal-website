@@ -24,6 +24,7 @@ export default function Home() {
     document.documentElement.style.setProperty("--brand", brand);
     try { localStorage.setItem("accent-hue", String(hue)); } catch { }
   }, [hue]);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   // Header elevation on scroll
   const headerRef = useRef<HTMLElement | null>(null);
@@ -38,7 +39,16 @@ export default function Home() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
+useEffect(() => {
+  const close = () => setMenuOpen(false);
+  const onResize = () => { if (window.innerWidth >= 1024) setMenuOpen(false); };
+  window.addEventListener("hashchange", close);
+  window.addEventListener("resize", onResize);
+  return () => {
+    window.removeEventListener("hashchange", close);
+    window.removeEventListener("resize", onResize);
+  };
+}, []);
   // Reveal-on-scroll
   useEffect(() => {
     const els = Array.from(document.querySelectorAll<HTMLElement>(".reveal"));
@@ -139,25 +149,53 @@ export default function Home() {
   return (
     <>
       <header ref={headerRef} className={styles.header} aria-label="Site header">
-        <a className={styles.brand} href="#home" aria-label="Go to top">
-          Alkinoos Michalopoulos
-        </a>
+  <a className={styles.brand} href="#home" aria-label="Go to top">
+    Alkinoos Michalopoulos
+  </a>
 
-        <nav className={styles.nav} aria-label="Primary">
-          {sections.map((id) => (
-            <a
-              key={id}
-              href={`#${id}`}
-              className={active === id ? "active" : undefined}
-              aria-current={active === id ? "page" : undefined}
-            >
-              {id.charAt(0).toUpperCase() + id.slice(1)}
-            </a>
-          ))}
-        </nav>
+  {/* Desktop / tablet nav */}
+  <nav className={styles.nav} aria-label="Primary">
+    {sections.map((id) => (
+      <a
+        key={id}
+        href={`#${id}`}
+        className={active === id ? "active" : undefined}
+        aria-current={active === id ? "page" : undefined}
+      >
+        {id.charAt(0).toUpperCase() + id.slice(1)}
+      </a>
+    ))}
+  </nav>
 
-      </header>
-      <div className={styles.aura} aria-hidden="true" />
+  {/* Hamburger button (visible on mobile) */}
+  <button
+    className={styles.menuBtn}
+    aria-label="Toggle menu"
+    aria-expanded={menuOpen}
+    aria-controls="mobile-nav"
+    onClick={() => setMenuOpen((v) => !v)}
+  >
+    {menuOpen ? "✕" : "☰"}
+  </button>
+
+  {/* Mobile menu overlay */}
+  {menuOpen && (
+    <>
+      <div
+        className={styles.scrim}
+        onClick={() => setMenuOpen(false)}
+        aria-hidden="true"
+      />
+      <div id="mobile-nav" className={styles.mobileNav} role="dialog" aria-label="Mobile navigation">
+        {sections.map((id) => (
+          <a key={id} href={`#${id}`} onClick={() => setMenuOpen(false)}>
+            {id.charAt(0).toUpperCase() + id.slice(1)}
+          </a>
+        ))}
+      </div>
+    </>
+  )}
+</header>
 
 
       <main id="home" className={styles.main}>
@@ -174,7 +212,7 @@ export default function Home() {
             />
             <h1 id="hero-title">Hi, I’m Alkan 🧑🏼‍💻</h1>
             <p className={styles.tagline}>
-              Welcome to my world 🌍 <br/> I love turning ideas into code,
+              Welcome to my world 🚀 <br /> I love turning ideas into code,
               exploring new technologies, and building things that make an impact.
             </p>
             <div className={styles.ctaRow}>
@@ -187,33 +225,82 @@ export default function Home() {
         {/* About */}
         <section id="about" className={`${styles.section} reveal`} aria-labelledby="about-title">
           <h2 id="about-title">About</h2>
-          <p>
-            I’m a <strong>Full Stack & Cloud Engineer</strong> at <strong>Piraeus Bank</strong>, focused on building
-            mission-critical financial systems with a keen eye on scalability, reliability, and security.
-            I thrive on crafting robust back-end services, architecting secure cloud infrastructure, and
-            delivering polished features from idea to production.
-          </p>
 
           <p>
-            What drives me:
-          </p>
-          <ul className={styles.bullets}>
-            <li>✨ Engineering elegance — clean code, modular design, and clear interfaces</li>
-            <li>⚡ Infrastructure resilience — designing systems that scale and stay reliable</li>
-            <li>🔒 Security-first thinking — protecting sensitive data and reducing risk</li>
-            <li>🚀 End-to-end ownership — taking features from spec to user delight</li>
-          </ul>
-
-          <p>
-            Technologies I work with include cloud platforms (AWS / Azure),C#, Node.js, Python, React,
-            SQL/NoSQL databases, CI/CD pipelines, containerization, and infrastructure-as-code.
+            I’m a <strong>Full Stack & Cloud Engineer</strong> currently working on a project at
+            <strong> Piraeus Bank</strong>, where I’m responsible for the <strong>APIs</strong> and
+            <strong> cloud infrastructure</strong> powering services for businesses.<br />
+            My focus is on building scalable, secure systems and ensuring that complex
+            financial applications run reliably in production. I enjoy end-to-end ownership
+            from design and implementation to deployment and observability.
           </p>
 
-          <p>
-            Let’s connect, build something powerful, and make systems that users — and businesses — can trust!
-          </p>
+          <div className={styles.techGrid} aria-label="Technical toolbox">
+            {/* Languages */}
+            <article className={styles.techCard}>
+              <div className={styles.techIcon} aria-hidden="true">&lt;/&gt;</div>
+              <div>
+                <h3 className={styles.techTitle}>Languages</h3>
+                <div className={styles.chips}>
+                  <span>C#</span><span>TypeScript</span><span>JavaScript</span><span>Python</span><span>C/C++</span><span>Java</span>
+                </div>
+              </div>
+            </article>
+            {/* Web Protocols */}
+            <article className={styles.techCard}>
+              <div className={styles.techIcon} aria-hidden="true">🕷️</div>
+              <div>
+                <h3 className={styles.techTitle}>Web Protocols</h3>
+                <div className={styles.chips}>
+                  <span>REST</span><span>WebSockets</span><span>MQTT</span><span>GraphQL</span><span>SOAP</span>
+                </div>
+              </div>
+            </article>
+            {/* Frontend */}
+            <article className={styles.techCard}>
+              <div className={styles.techIcon} aria-hidden="true">UI</div>
+              <div>
+                <h3 className={styles.techTitle}>Frontend</h3>
+                <div className={styles.chips}>
+                  <span>Blazor</span><span>Angular</span><span>React</span><span>Next.js</span><span>CSS Modules</span><span>HTML</span>
+                </div>
+              </div>
+            </article>
+
+            {/* Backend / APIs */}
+            <article className={styles.techCard}>
+              <div className={styles.techIcon} aria-hidden="true">API</div>
+              <div>
+                <h3 className={styles.techTitle}>Backend & APIs</h3>
+                <div className={styles.chips}>
+                  <span>.NET</span><span>Node.js</span><span>ASP.NET Web API</span><span>FastAPI</span><span>Spring Boot</span>
+                </div>
+              </div>
+            </article>
+
+            {/* Databases */}
+            <article className={styles.techCard}>
+              <div className={styles.techIcon} aria-hidden="true">⛁</div>
+              <div>
+                <h3 className={styles.techTitle}>Databases & ORM</h3>
+                <div className={styles.chips}>
+                  <span>SQL Server</span><span>PostgreSQL</span><span>SMSS</span><span>Entity framework</span><span>SQL Alchemy</span>
+                </div>
+              </div>
+            </article>
+
+            {/* Cloud / DevOps */}
+            <article className={styles.techCard}>
+              <div className={styles.techIcon} aria-hidden="true">☁︎</div>
+              <div>
+                <h3 className={styles.techTitle}>Cloud & DevOps</h3>
+                <div className={styles.chips}>
+                  <span>Azure</span><span>Kuburnetes</span><span>Docker</span><span>Containerization</span><span>ArgoCD</span><span>Infra-as-Code</span>
+                </div>
+              </div>
+            </article>
+          </div>
         </section>
-
         {/* Experience */}
         <section id="experience" className={`${styles.section} reveal`} aria-labelledby="experience-title">
           <h2 id="experience-title">Experience</h2>
@@ -262,23 +349,22 @@ export default function Home() {
           <div className={styles.grid}>
             <article className={`${styles.card} reveal`}>
               <Image
-                src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=800&auto=format&fit=crop"
+                src="/thesis.png"
                 alt="Project One"
                 width={800}
                 height={450}
                 className={styles.cardImg}
               />
               <div className={styles.cardBody}>
-                <h3>Project One</h3>
+                <h3>Hand anti-spasticity robotic device</h3>
                 <p>
-                  One-liner that explains the problem, your solution, impact, and what tech you used.
+                  My thesis project for graduation 
                 </p>
                 <div className={styles.tags}>
-                  <span>React</span><span>Node</span><span>PostgreSQL</span>
+                  <span>RaspberryPi</span><span>Python</span><span>Robotics modules</span>
                 </div>
                 <div className={styles.links}>
-                  <a href="https://example.com" target="_blank" rel="noreferrer">Live →</a>
-                  <a href="https://github.com/your/repo" target="_blank" rel="noreferrer">Code →</a>
+                  <a href="https://github.com/Alkan0/Anti-Spasticity_Hand-Device" target="_blank" rel="noreferrer">Code →</a>
                 </div>
               </div>
             </article>
@@ -340,8 +426,31 @@ export default function Home() {
                 ✉️ <a href="mailto:alkinoos.m@outlook.com">alkinoos.m@outlook.com</a>
               </p>
               <p className={styles.contactLine}>
-                🐙 <a href="https://github.com/Alkan0">GitHub</a> &nbsp;|&nbsp; 💼{" "}
-                <a href="https://www.linkedin.com/in/alkinoos-michail-michalopoulos-tsesmetzis-4412a6262/">LinkedIn</a>
+                <a href="https://github.com/alkan0" target="_blank" rel="noreferrer" aria-label="GitHub">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    role="img"
+                    viewBox="0 0 24 24"
+                    width="20"
+                    height="20"
+                    fill="white"
+                    style={{ display: "inline-block", verticalAlign: "middle", marginRight: "6px" }}
+                  >
+                    <path d="M12 .296a12 12 0 0 0-3.792 23.404c.6.112.82-.26.82-.577v-2.234c-3.338.727-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.757-1.333-1.757-1.09-.746.083-.73.083-.73 1.205.084 1.84 1.238 1.84 1.238 1.07 1.834 2.807 1.304 3.492.997.108-.775.418-1.305.762-1.605-2.665-.303-5.466-1.332-5.466-5.93 0-1.31.47-2.38 1.237-3.22-.124-.304-.536-1.523.117-3.176 0 0 1.008-.322 3.3 1.23a11.52 11.52 0 0 1 6 0c2.29-1.552 3.297-1.23 3.297-1.23.655 1.653.243 2.872.12 3.176.77.84 1.236 1.91 1.236 3.22 0 4.61-2.804 5.624-5.475 5.92.43.372.823 1.102.823 2.222v3.293c0 .32.218.694.825.576A12 12 0 0 0 12 .296z" />
+                  </svg>
+                  GitHub
+                </a>
+                &nbsp;|&nbsp;
+                <a href="https://www.linkedin.com/in/alkinoos-michail-michalopoulos-tsesmetzis-4412a6262/" target="_blank" rel="noreferrer" aria-label="LinkedIn">
+                  <img
+                    src="https://cdn-icons-png.flaticon.com/512/174/174857.png"
+                    alt="LinkedIn logo"
+                    width="20"
+                    height="20"
+                    style={{ display: "inline-block", verticalAlign: "middle", marginRight: "6px" }}
+                  />
+                  LinkedIn
+                </a>
               </p>
             </div>
             <form
