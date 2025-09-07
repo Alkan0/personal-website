@@ -9,40 +9,66 @@
 
 /* ===================== Header ===================== */
 .header {
-  position: sticky; top: 0; z-index: 50;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 14px 18px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;              /* μικρότερο padding */
   border-bottom: 1px solid var(--border);
   background: color-mix(in oklab, var(--bg) 92%, #000 8%);
+  -webkit-backdrop-filter: saturate(150%) blur(6px);
   backdrop-filter: saturate(150%) blur(6px);
 }
-.brand { font-weight: 800; letter-spacing: -.01em; color: var(--text); text-decoration: none; }
 
-/* Always-visible nav (compact on small screens) */
-.nav {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
+.brand {
+  font-weight: 800;
+  font-size: 15px;                 /* λίγο μικρότερο */
+  letter-spacing: -.01em;
+  color: var(--text);
+  text-decoration: none;
 }
+
+/* Nav links (shared styles) */
 .nav a {
   color: var(--muted);
-  padding: 6px 8px;
-  border-radius: 10px;
+  padding: 4px 6px;                /* πιο μαζεμένο */
+  border-radius: 8px;
   text-decoration: none;
-  font-size: 14px;
-  line-height: 1;
+  font-size: 13px;
+  line-height: 1.2;
 }
 .nav a:hover { background: var(--accent); color: var(--text); }
 .nav a.active { color: var(--text); }
 
-/* Wider spacing & size on desktop */
-@media (min-width: 768px) {
-  .nav { gap: 14px; }
-  .nav a { font-size: 15px; padding: 8px 10px; }
+/* Desktop nav ≥1024px */
+.nav { display: none; }
+@media (min-width: 1024px) {
+  .nav { display: flex; gap: 10px; }
+  .nav a { font-size: 14px; padding: 6px 8px; }
 }
 
-/* Remove old hamburger/panel if JSX still exists */
-.menuBtn, .mobileNav { display: none !important; }
+/* Burger button <1024px */
+.menuBtn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 32px;                     /* μικρότερο κουμπί */
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  font-size: 16px;                 /* μικρότερο εικονίδιο ☰ */
+  cursor: pointer;
+}
+.menuBtn:hover { background: var(--accent); }
+@media (max-width: 1023px) { .menuBtn { display: inline-flex; } }
+
+/* Header elevation helper */
+.elevate {}
+.header.elevate { box-shadow: 0 6px 16px rgba(0,0,0,.25); }
 
 /* Header elevation helper (toggled by JS) */
 .elevate {}
@@ -415,16 +441,6 @@
   .nav { display: none; }
 }
 
-/* Show hamburger on widths < 1024px */
-.menuBtn {
-  display: none;
-  align-items: center; justify-content: center;
-  width: 38px; height: 38px;
-  border-radius: 10px; border: 1px solid var(--border);
-  background: transparent; color: var(--text); cursor: pointer;
-}
-.menuBtn:hover { background: var(--accent); }
-@media (max-width: 1023px) { .menuBtn { display: inline-flex; } }
 
 /* Scrim + mobile menu UI (unchanged) */
 .scrim {
@@ -446,3 +462,49 @@
   color: var(--text); text-decoration: none;
 }
 .mobileNav a:hover { background: var(--accent); }
+.section {
+  position: relative;
+  padding: 40px 0;
+}
+@media (min-width: 768px) {
+  .section { padding: 56px 0; }
+}
+
+.sectionCard {
+  position: relative;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background:
+    radial-gradient(1200px 600px at 10% -20%, color-mix(in oklab, var(--brand) 8%, transparent), transparent 60%),
+    var(--card);
+  padding: 18px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.22);
+}
+@media (min-width: 768px) {
+  .sectionCard { padding: 24px; }
+}
+
+/* Accent underline for titles */
+.sectionCard > h2 {
+  display: inline-block;
+  margin-bottom: 14px;
+  padding-bottom: 6px;
+  border-bottom: 2px solid color-mix(in oklab, var(--brand) 60%, transparent);
+}
+
+/* Alternate sections get a flipped accent + lighter backdrop */
+.section:nth-of-type(even) .sectionCard {
+  background:
+    radial-gradient(1200px 600px at 110% -20%, color-mix(in oklab, var(--brand) 8%, transparent), transparent 60%),
+    var(--card);
+}
+
+/* Optional: soft top divider curve */
+.section::before {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; top: -24px; height: 24px;
+  background: linear-gradient(to bottom, rgba(0,0,0,.18), transparent);
+  opacity: .25;
+  pointer-events: none;
+}

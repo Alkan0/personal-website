@@ -11,6 +11,9 @@ type SectionId = typeof NAV_SECTIONS[number];
 const COPYRIGHT_YEAR = 2025;
 
 export default function Home() {
+  const menuBtnRef = useRef<HTMLButtonElement | null>(null);
+  const mobileNavRef = useRef<HTMLDivElement | null>(null);
+
   // Accent color (SSR-safe)
   const [hue, setHue] = useState<number>(220);
   useEffect(() => {
@@ -19,13 +22,36 @@ export default function Home() {
       if (saved) setHue(parseInt(saved, 10));
     } catch { }
   }, []);
+
   useEffect(() => {
     const brand = `hsl(${hue} 85% 72%)`;
     document.documentElement.style.setProperty("--brand", brand);
     try { localStorage.setItem("accent-hue", String(hue)); } catch { }
   }, [hue]);
   const [menuOpen, setMenuOpen] = useState(false);
+  useEffect(() => {
+    if (!menuOpen) return;
 
+    const onDocDown = (e: MouseEvent) => {
+      const t = e.target as Node;
+      if (
+        mobileNavRef.current?.contains(t) ||
+        menuBtnRef.current?.contains(t)
+      ) return; // click inside, ignore
+      setMenuOpen(false);
+    };
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMenuOpen(false);
+    };
+
+    document.addEventListener("mousedown", onDocDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDocDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [menuOpen]);
   // Header elevation on scroll
   const headerRef = useRef<HTMLElement | null>(null);
   useEffect(() => {
@@ -39,16 +65,16 @@ export default function Home() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-useEffect(() => {
-  const close = () => setMenuOpen(false);
-  const onResize = () => { if (window.innerWidth >= 1024) setMenuOpen(false); };
-  window.addEventListener("hashchange", close);
-  window.addEventListener("resize", onResize);
-  return () => {
-    window.removeEventListener("hashchange", close);
-    window.removeEventListener("resize", onResize);
-  };
-}, []);
+  useEffect(() => {
+    const close = () => setMenuOpen(false);
+    const onResize = () => { if (window.innerWidth >= 1024) setMenuOpen(false); };
+    window.addEventListener("hashchange", close);
+    window.addEventListener("resize", onResize);
+    return () => {
+      window.removeEventListener("hashchange", close);
+      window.removeEventListener("resize", onResize);
+    };
+  }, []);
   // Reveal-on-scroll
   useEffect(() => {
     const els = Array.from(document.querySelectorAll<HTMLElement>(".reveal"));
@@ -149,53 +175,55 @@ useEffect(() => {
   return (
     <>
       <header ref={headerRef} className={styles.header} aria-label="Site header">
-  <a className={styles.brand} href="#home" aria-label="Go to top">
-    Alkinoos Michalopoulos
-  </a>
+        <div className={styles.aura} aria-hidden="true" />
 
-  {/* Desktop / tablet nav */}
-  <nav className={styles.nav} aria-label="Primary">
-    {sections.map((id) => (
-      <a
-        key={id}
-        href={`#${id}`}
-        className={active === id ? "active" : undefined}
-        aria-current={active === id ? "page" : undefined}
-      >
-        {id.charAt(0).toUpperCase() + id.slice(1)}
-      </a>
-    ))}
-  </nav>
+        <a className={styles.brand} href="#home" aria-label="Go to top">
+          Alkinoos Michalopoulos
+        </a>
 
-  {/* Hamburger button (visible on mobile) */}
-  <button
-    className={styles.menuBtn}
-    aria-label="Toggle menu"
-    aria-expanded={menuOpen}
-    aria-controls="mobile-nav"
-    onClick={() => setMenuOpen((v) => !v)}
-  >
-    {menuOpen ? "✕" : "☰"}
-  </button>
+        {/* Desktop / tablet nav */}
+        <nav className={styles.nav} aria-label="Primary">
+          {sections.map((id) => (
+            <a
+              key={id}
+              href={`#${id}`}
+              className={active === id ? "active" : undefined}
+              aria-current={active === id ? "page" : undefined}
+            >
+              {id.charAt(0).toUpperCase() + id.slice(1)}
+            </a>
+          ))}
+        </nav>
 
-  {/* Mobile menu overlay */}
-  {menuOpen && (
-    <>
-      <div
-        className={styles.scrim}
-        onClick={() => setMenuOpen(false)}
-        aria-hidden="true"
-      />
-      <div id="mobile-nav" className={styles.mobileNav} role="dialog" aria-label="Mobile navigation">
-        {sections.map((id) => (
-          <a key={id} href={`#${id}`} onClick={() => setMenuOpen(false)}>
-            {id.charAt(0).toUpperCase() + id.slice(1)}
-          </a>
-        ))}
-      </div>
-    </>
-  )}
-</header>
+        {/* Hamburger button (visible on mobile) */}
+        <button
+          className={styles.menuBtn}
+          aria-label="Toggle menu"
+          aria-expanded={menuOpen}
+          aria-controls="mobile-nav"
+          onClick={() => setMenuOpen((v) => !v)}
+        >
+          {menuOpen ? "✕" : "☰"}
+        </button>
+
+        {/* Mobile menu overlay */}
+        {menuOpen && (
+          <>
+            <div
+              className={styles.scrim}
+              onClick={() => setMenuOpen(false)}
+              aria-hidden="true"
+            />
+            <div id="mobile-nav" className={styles.mobileNav} role="dialog" aria-label="Mobile navigation">
+              {sections.map((id) => (
+                <a key={id} href={`#${id}`} onClick={() => setMenuOpen(false)}>
+                  {id.charAt(0).toUpperCase() + id.slice(1)}
+                </a>
+              ))}
+            </div>
+          </>
+        )}
+      </header>
 
 
       <main id="home" className={styles.main}>
@@ -224,198 +252,204 @@ useEffect(() => {
 
         {/* About */}
         <section id="about" className={`${styles.section} reveal`} aria-labelledby="about-title">
-          <h2 id="about-title">About</h2>
+          <div className={styles.sectionCard}>
+            <h2 id="about-title">About</h2>
+            <p>
+              I’m a <strong>Full Stack & Cloud Engineer</strong> currently working on a project at
+              <strong> Piraeus Bank</strong>, where I’m responsible for the <strong>APIs</strong> and
+              <strong> cloud infrastructure</strong> powering services for businesses.<br />
+              My focus is on building scalable, secure systems and ensuring that complex
+              financial applications run reliably in production. I enjoy end-to-end ownership
+              from design and implementation to deployment and observability.
+            </p>
 
-          <p>
-            I’m a <strong>Full Stack & Cloud Engineer</strong> currently working on a project at
-            <strong> Piraeus Bank</strong>, where I’m responsible for the <strong>APIs</strong> and
-            <strong> cloud infrastructure</strong> powering services for businesses.<br />
-            My focus is on building scalable, secure systems and ensuring that complex
-            financial applications run reliably in production. I enjoy end-to-end ownership
-            from design and implementation to deployment and observability.
-          </p>
+            <div className={styles.techGrid} aria-label="Technical toolbox">
+              {/* Languages */}
+              <article className={styles.techCard}>
+                <div className={styles.techIcon} aria-hidden="true">&lt;/&gt;</div>
+                <div>
+                  <h3 className={styles.techTitle}>Languages</h3>
+                  <div className={styles.chips}>
+                    <span>C#</span><span>TypeScript</span><span>JavaScript</span><span>Python</span><span>C/C++</span><span>Java</span>
+                  </div>
+                </div>
+              </article>
+              {/* Web Protocols */}
+              <article className={styles.techCard}>
+                <div className={styles.techIcon} aria-hidden="true">🌐</div>
+                <div>
+                  <h3 className={styles.techTitle}>Web Protocols</h3>
+                  <div className={styles.chips}>
+                    <span>REST</span><span>WebSockets</span><span>MQTT</span><span>GraphQL</span><span>SOAP</span>
+                  </div>
+                </div>
+              </article>
+              {/* Frontend */}
+              <article className={styles.techCard}>
+                <div className={styles.techIcon} aria-hidden="true">UI</div>
+                <div>
+                  <h3 className={styles.techTitle}>Frontend</h3>
+                  <div className={styles.chips}>
+                    <span>Blazor</span><span>Angular</span><span>React</span><span>Next.js</span><span>CSS Modules</span><span>HTML</span>
+                  </div>
+                </div>
+              </article>
 
-          <div className={styles.techGrid} aria-label="Technical toolbox">
-            {/* Languages */}
-            <article className={styles.techCard}>
-              <div className={styles.techIcon} aria-hidden="true">&lt;/&gt;</div>
-              <div>
-                <h3 className={styles.techTitle}>Languages</h3>
-                <div className={styles.chips}>
-                  <span>C#</span><span>TypeScript</span><span>JavaScript</span><span>Python</span><span>C/C++</span><span>Java</span>
+              {/* Backend / APIs */}
+              <article className={styles.techCard}>
+                <div className={styles.techIcon} aria-hidden="true">API</div>
+                <div>
+                  <h3 className={styles.techTitle}>Backend & APIs</h3>
+                  <div className={styles.chips}>
+                    <span>.NET</span><span>Node.js</span><span>ASP.NET Web API</span><span>FastAPI</span><span>Spring Boot</span>
+                  </div>
                 </div>
-              </div>
-            </article>
-            {/* Web Protocols */}
-            <article className={styles.techCard}>
-              <div className={styles.techIcon} aria-hidden="true">🕷️</div>
-              <div>
-                <h3 className={styles.techTitle}>Web Protocols</h3>
-                <div className={styles.chips}>
-                  <span>REST</span><span>WebSockets</span><span>MQTT</span><span>GraphQL</span><span>SOAP</span>
-                </div>
-              </div>
-            </article>
-            {/* Frontend */}
-            <article className={styles.techCard}>
-              <div className={styles.techIcon} aria-hidden="true">UI</div>
-              <div>
-                <h3 className={styles.techTitle}>Frontend</h3>
-                <div className={styles.chips}>
-                  <span>Blazor</span><span>Angular</span><span>React</span><span>Next.js</span><span>CSS Modules</span><span>HTML</span>
-                </div>
-              </div>
-            </article>
+              </article>
 
-            {/* Backend / APIs */}
-            <article className={styles.techCard}>
-              <div className={styles.techIcon} aria-hidden="true">API</div>
-              <div>
-                <h3 className={styles.techTitle}>Backend & APIs</h3>
-                <div className={styles.chips}>
-                  <span>.NET</span><span>Node.js</span><span>ASP.NET Web API</span><span>FastAPI</span><span>Spring Boot</span>
+              {/* Databases */}
+              <article className={styles.techCard}>
+                <div className={styles.techIcon} aria-hidden="true">⛁</div>
+                <div>
+                  <h3 className={styles.techTitle}>Databases & ORM</h3>
+                  <div className={styles.chips}>
+                    <span>SQL Server</span><span>PostgreSQL</span><span>SMSS</span><span>Entity framework</span><span>SQL Alchemy</span>
+                  </div>
                 </div>
-              </div>
-            </article>
+              </article>
 
-            {/* Databases */}
-            <article className={styles.techCard}>
-              <div className={styles.techIcon} aria-hidden="true">⛁</div>
-              <div>
-                <h3 className={styles.techTitle}>Databases & ORM</h3>
-                <div className={styles.chips}>
-                  <span>SQL Server</span><span>PostgreSQL</span><span>SMSS</span><span>Entity framework</span><span>SQL Alchemy</span>
+              {/* Cloud / DevOps */}
+              <article className={styles.techCard}>
+                <div className={styles.techIcon} aria-hidden="true">☁︎</div>
+                <div>
+                  <h3 className={styles.techTitle}>Cloud & DevOps</h3>
+                  <div className={styles.chips}>
+                    <span>Azure</span><span>Kuburnetes</span><span>Docker</span><span>Containerization</span><span>ArgoCD</span><span>Infra-as-Code</span>
+                  </div>
                 </div>
-              </div>
-            </article>
-
-            {/* Cloud / DevOps */}
-            <article className={styles.techCard}>
-              <div className={styles.techIcon} aria-hidden="true">☁︎</div>
-              <div>
-                <h3 className={styles.techTitle}>Cloud & DevOps</h3>
-                <div className={styles.chips}>
-                  <span>Azure</span><span>Kuburnetes</span><span>Docker</span><span>Containerization</span><span>ArgoCD</span><span>Infra-as-Code</span>
-                </div>
-              </div>
-            </article>
+              </article>
+            </div>
           </div>
         </section>
         {/* Experience */}
         <section id="experience" className={`${styles.section} reveal`} aria-labelledby="experience-title">
-          <h2 id="experience-title">Experience</h2>
-          <div className={styles.timeline}>
-            <div className={styles.entry}>
-              <div className={styles.dot} />
-              <div className={styles.entryContent}>
-                <h3>Information Technology Consultant</h3>
-                <p>EY — Apr 2025 – Present</p>
+          <div className={styles.sectionCard}>
+            <h2 id="experience-title">Experience</h2>
+            <div className={styles.timeline}>
+              <div className={styles.entry}>
+                <div className={styles.dot} />
+                <div className={styles.entryContent}>
+                  <h3>Information Technology Consultant</h3>
+                  <p>EY — Apr 2025 – Present</p>
+                </div>
+              </div>
+              <div className={styles.entry}>
+                <div className={styles.dot} />
+                <div className={styles.entryContent}>
+                  <h3>Junior Web Developer</h3>
+                  <p>COVARIANCE P.C. — Sep 2024 – Apr 2025</p>
+                </div>
+              </div>
+              <div className={styles.entry}>
+                <div className={styles.dot} />
+                <div className={styles.entryContent}>
+                  <h3>Web Development Intern</h3>
+                  <p>COVARIANCE P.C. — Jul 2024 – Sep 2024</p>
+                </div>
+              </div>
+              <div className={styles.entry}>
+                <div className={styles.dot} />
+                <div className={styles.entryContent}>
+                  <h3>Robotics Laboratory Manager</h3>
+                  <p>University of the Aegean — Feb 2024 – Jul 2024</p>
+                </div>
               </div>
             </div>
-            <div className={styles.entry}>
-              <div className={styles.dot} />
-              <div className={styles.entryContent}>
-                <h3>Junior Web Developer</h3>
-                <p>COVARIANCE P.C. — Sep 2024 – Apr 2025</p>
-              </div>
-            </div>
-            <div className={styles.entry}>
-              <div className={styles.dot} />
-              <div className={styles.entryContent}>
-                <h3>Web Development Intern</h3>
-                <p>COVARIANCE P.C. — Jul 2024 – Sep 2024</p>
-              </div>
-            </div>
-            <div className={styles.entry}>
-              <div className={styles.dot} />
-              <div className={styles.entryContent}>
-                <h3>Robotics Laboratory Manager</h3>
-                <p>University of the Aegean — Feb 2024 – Jul 2024</p>
-              </div>
+            {/* CV Download under the line */}
+            <div className={styles.cvDownload}>
+              <a href="/cv.pdf" download className={styles.secondaryBtn}>
+                Download CV
+              </a>
             </div>
           </div>
-          {/* CV Download under the line */}
-          <div className={styles.cvDownload}>
-            <a href="/cv.pdf" download className={styles.secondaryBtn}>
-              Download CV
-            </a>
-          </div>
-
         </section>
 
         {/* Projects */}
         <section id="projects" className={`${styles.section} reveal`} aria-labelledby="projects-title">
-          <h2 id="projects-title">Projects</h2>
-          <div className={styles.grid}>
-            <article className={`${styles.card} reveal`}>
-              <Image
-                src="/thesis.png"
-                alt="Project One"
-                width={800}
-                height={450}
-                className={styles.cardImg}
-              />
-              <div className={styles.cardBody}>
-                <h3>Hand anti-spasticity robotic device</h3>
-                <p>
-                  My thesis project for graduation 
-                </p>
-                <div className={styles.tags}>
-                  <span>RaspberryPi</span><span>Python</span><span>Robotics modules</span>
+          <div className={styles.sectionCard}>
+            <h2 id="projects-title">Projects</h2>
+            <div className={styles.grid}>
+              <article className={`${styles.card} reveal`}>
+                <Image
+                  src="/thesis.png"
+                  alt="Project One"
+                  width={800}
+                  height={450}
+                  className={styles.cardImg}
+                />
+                <div className={styles.cardBody}>
+                  <h3>Hand anti-spasticity robotic device</h3>
+                  <p>
+                    My thesis project for graduation
+                  </p>
+                  <div className={styles.tags}>
+                    <span>RaspberryPi</span><span>Python</span><span>Robotics modules</span>
+                  </div>
+                  <div className={styles.links}>
+                    <a href="https://github.com/Alkan0/Anti-Spasticity_Hand-Device" target="_blank" rel="noreferrer">Code →</a>
+                  </div>
                 </div>
-                <div className={styles.links}>
-                  <a href="https://github.com/Alkan0/Anti-Spasticity_Hand-Device" target="_blank" rel="noreferrer">Code →</a>
-                </div>
-              </div>
-            </article>
+              </article>
 
-            <article className={`${styles.card} reveal`}>
-              <Image
-                src="https://images.unsplash.com/photo-1526481280698-8fcc13fd2401?q=80&w=800&auto=format&fit=crop"
-                alt="Project Two"
-                width={800}
-                height={450}
-                className={styles.cardImg}
-              />
-              <div className={styles.cardBody}>
-                <h3>Project Two</h3>
-                <p>Highlight a result (e.g., 40% faster, 10k MAU) and your specific contribution.</p>
-                <div className={styles.tags}>
-                  <span>Next.js</span><span>TypeScript</span><span>CSS</span>
+              <article className={`${styles.card} reveal`}>
+                <Image
+                  src="https://images.unsplash.com/photo-1526481280698-8fcc13fd2401?q=80&w=800&auto=format&fit=crop"
+                  alt="Project Two"
+                  width={800}
+                  height={450}
+                  className={styles.cardImg}
+                />
+                <div className={styles.cardBody}>
+                  <h3>Project Two</h3>
+                  <p>Highlight a result (e.g., 40% faster, 10k MAU) and your specific contribution.</p>
+                  <div className={styles.tags}>
+                    <span>Next.js</span><span>TypeScript</span><span>CSS</span>
+                  </div>
+                  <div className={styles.links}>
+                    <a href="https://example.com" target="_blank" rel="noreferrer">Live →</a>
+                    <a href="https://github.com/your/repo" target="_blank" rel="noreferrer">Code →</a>
+                  </div>
                 </div>
-                <div className={styles.links}>
-                  <a href="https://example.com" target="_blank" rel="noreferrer">Live →</a>
-                  <a href="https://github.com/your/repo" target="_blank" rel="noreferrer">Code →</a>
-                </div>
-              </div>
-            </article>
+              </article>
 
-            <article className={`${styles.card} reveal`}>
-              <Image
-                src="https://images.unsplash.com/photo-1518779578993-ec3579fee39f?q=80&w=800&auto=format&fit=crop"
-                alt="Project Three"
-                width={800}
-                height={450}
-                className={styles.cardImg}
-              />
-              <div className={styles.cardBody}>
-                <h3>Project Three</h3>
-                <p>Keep it crisp. Add a small metric if you can; people skim.</p>
-                <div className={styles.tags}>
-                  <span>Python</span><span>FastAPI</span><span>Redis</span>
+              <article className={`${styles.card} reveal`}>
+                <Image
+                  src="https://images.unsplash.com/photo-1518779578993-ec3579fee39f?q=80&w=800&auto=format&fit=crop"
+                  alt="Project Three"
+                  width={800}
+                  height={450}
+                  className={styles.cardImg}
+                />
+                <div className={styles.cardBody}>
+                  <h3>Project Three</h3>
+                  <p>Keep it crisp. Add a small metric if you can; people skim.</p>
+                  <div className={styles.tags}>
+                    <span>Python</span><span>FastAPI</span><span>Redis</span>
+                  </div>
+                  <div className={styles.links}>
+                    <a href="https://example.com" target="_blank" rel="noreferrer">Live →</a>
+                    <a href="https://github.com/your/repo" target="_blank" rel="noreferrer">Code →</a>
+                  </div>
                 </div>
-                <div className={styles.links}>
-                  <a href="https://example.com" target="_blank" rel="noreferrer">Live →</a>
-                  <a href="https://github.com/your/repo" target="_blank" rel="noreferrer">Code →</a>
-                </div>
-              </div>
-            </article>
+              </article>
+            </div>
           </div>
+
         </section>
 
         {/* Contact */}
         <section id="contact" className={`${styles.section} reveal`} aria-labelledby="contact-title">
-          <h2 id="contact-title">Contact</h2>
+  <div className={styles.sectionCard}>
+    <h2 id="contact-title">Contact</h2>
           <div className={styles.contactWrap}>
             <div>
               <p>
@@ -474,6 +508,7 @@ useEffect(() => {
               </label>
               <button type="submit">Send →</button>
             </form>
+          </div>
           </div>
         </section>
       </main>
