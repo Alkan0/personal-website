@@ -174,8 +174,9 @@ export default function Home() {
   }, []);
   return (
     <>
+      <div className={styles.aura} aria-hidden="true" />
       <header ref={headerRef} className={styles.header} aria-label="Site header">
-        <div className={styles.aura} aria-hidden="true" />
+
 
         <a className={styles.brand} href="#home" aria-label="Go to top">
           Alkinoos Michalopoulos
@@ -448,67 +449,67 @@ export default function Home() {
 
         {/* Contact */}
         <section id="contact" className={`${styles.section} reveal`} aria-labelledby="contact-title">
-  <div className={styles.sectionCard}>
-    <h2 id="contact-title">Contact</h2>
-          <div className={styles.contactWrap}>
-            <div>
-              <p>
-                The quickest way to reach me is email. I’m open to interesting projects,
-                collaborations, and coffee chats.
-              </p>
-              <p className={styles.contactLine}>
-                ✉️ <a href="mailto:alkinoos.m@outlook.com">alkinoos.m@outlook.com</a>
-              </p>
-              <p className={styles.contactLine}>
-                <a href="https://github.com/alkan0" target="_blank" rel="noreferrer" aria-label="GitHub">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    role="img"
-                    viewBox="0 0 24 24"
-                    width="20"
-                    height="20"
-                    fill="white"
-                    style={{ display: "inline-block", verticalAlign: "middle", marginRight: "6px" }}
-                  >
-                    <path d="M12 .296a12 12 0 0 0-3.792 23.404c.6.112.82-.26.82-.577v-2.234c-3.338.727-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.757-1.333-1.757-1.09-.746.083-.73.083-.73 1.205.084 1.84 1.238 1.84 1.238 1.07 1.834 2.807 1.304 3.492.997.108-.775.418-1.305.762-1.605-2.665-.303-5.466-1.332-5.466-5.93 0-1.31.47-2.38 1.237-3.22-.124-.304-.536-1.523.117-3.176 0 0 1.008-.322 3.3 1.23a11.52 11.52 0 0 1 6 0c2.29-1.552 3.297-1.23 3.297-1.23.655 1.653.243 2.872.12 3.176.77.84 1.236 1.91 1.236 3.22 0 4.61-2.804 5.624-5.475 5.92.43.372.823 1.102.823 2.222v3.293c0 .32.218.694.825.576A12 12 0 0 0 12 .296z" />
-                  </svg>
-                  GitHub
-                </a>
-                &nbsp;|&nbsp;
-                <a href="https://www.linkedin.com/in/alkinoos-michail-michalopoulos-tsesmetzis-4412a6262/" target="_blank" rel="noreferrer" aria-label="LinkedIn">
-                  <img
-                    src="https://cdn-icons-png.flaticon.com/512/174/174857.png"
-                    alt="LinkedIn logo"
-                    width="20"
-                    height="20"
-                    style={{ display: "inline-block", verticalAlign: "middle", marginRight: "6px" }}
-                  />
-                  LinkedIn
-                </a>
-              </p>
+          <div className={styles.sectionCard}>
+            <h2 id="contact-title">Contact</h2>
+            <div className={styles.contactWrap}>
+              <div>
+                <p>
+                  The quickest way to reach me is email. I’m open to interesting projects,
+                  collaborations, and coffee chats.
+                </p>
+                <p className={styles.contactLine}>
+                  ✉️ <a href="mailto:alkinoos.m@outlook.com">alkinoos.m@outlook.com</a>
+                </p>
+                <p className={styles.contactLine}>
+                  <a href="https://github.com/alkan0" target="_blank" rel="noreferrer" aria-label="GitHub">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      role="img"
+                      viewBox="0 0 24 24"
+                      width="20"
+                      height="20"
+                      fill="white"
+                      style={{ display: "inline-block", verticalAlign: "middle", marginRight: "6px" }}
+                    >
+                      <path d="M12 .296a12 12 0 0 0-3.792 23.404c.6.112.82-.26.82-.577v-2.234c-3.338.727-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.757-1.333-1.757-1.09-.746.083-.73.083-.73 1.205.084 1.84 1.238 1.84 1.238 1.07 1.834 2.807 1.304 3.492.997.108-.775.418-1.305.762-1.605-2.665-.303-5.466-1.332-5.466-5.93 0-1.31.47-2.38 1.237-3.22-.124-.304-.536-1.523.117-3.176 0 0 1.008-.322 3.3 1.23a11.52 11.52 0 0 1 6 0c2.29-1.552 3.297-1.23 3.297-1.23.655 1.653.243 2.872.12 3.176.77.84 1.236 1.91 1.236 3.22 0 4.61-2.804 5.624-5.475 5.92.43.372.823 1.102.823 2.222v3.293c0 .32.218.694.825.576A12 12 0 0 0 12 .296z" />
+                    </svg>
+                    GitHub
+                  </a>
+                  &nbsp;|&nbsp;
+                  <a href="https://www.linkedin.com/in/alkinoos-michail-michalopoulos-tsesmetzis-4412a6262/" target="_blank" rel="noreferrer" aria-label="LinkedIn">
+                    <img
+                      src="https://cdn-icons-png.flaticon.com/512/174/174857.png"
+                      alt="LinkedIn logo"
+                      width="20"
+                      height="20"
+                      style={{ display: "inline-block", verticalAlign: "middle", marginRight: "6px" }}
+                    />
+                    LinkedIn
+                  </a>
+                </p>
+              </div>
+              <form
+                className={styles.form}
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  alert("Demo form — wire this up to Formspree or an API route.");
+                }}
+              >
+                <label>
+                  <span>Your name</span>
+                  <input placeholder="Ada Lovelace" required />
+                </label>
+                <label>
+                  <span>Email</span>
+                  <input type="email" placeholder="ada@example.com" required />
+                </label>
+                <label>
+                  <span>Message</span>
+                  <textarea rows={4} placeholder="Tell me about your idea…" required />
+                </label>
+                <button type="submit">Send →</button>
+              </form>
             </div>
-            <form
-              className={styles.form}
-              onSubmit={(e) => {
-                e.preventDefault();
-                alert("Demo form — wire this up to Formspree or an API route.");
-              }}
-            >
-              <label>
-                <span>Your name</span>
-                <input placeholder="Ada Lovelace" required />
-              </label>
-              <label>
-                <span>Email</span>
-                <input type="email" placeholder="ada@example.com" required />
-              </label>
-              <label>
-                <span>Message</span>
-                <textarea rows={4} placeholder="Tell me about your idea…" required />
-              </label>
-              <button type="submit">Send →</button>
-            </form>
-          </div>
           </div>
         </section>
       </main>
